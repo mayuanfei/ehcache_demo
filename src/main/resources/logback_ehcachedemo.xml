@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- 文件输出格式 %d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+    <property name="PATTERN" value="%-12(%d{yyyy-MM-dd HH:mm:ss.SSS}) |-%-5level [%thread] %c [%L] -| %msg%n" />
+    <!-- test文件路径 -->
+    <property name="TEST_FILE_PATH" value="/home/dev/log/cloudorder" />
+    <!-- pro文件路径 -->
+    <property name="PRO_FILE_PATH" value="/data/cloudorder/logs" />
+
+    <!-- 开发环境 -->
+    <springProfile name="dev">
+        <!-- mybatis日志打印 -->
+        <logger name="com.ibatis" level="DEBUG" />
+        <logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG" />
+        <logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG" />
+        <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG" />
+        <logger name="java.sql.Connection" level="DEBUG" />
+        <logger name="java.sql.Statement" level="DEBUG" />
+        <logger name="java.sql.PreparedStatement" level="DEBUG" />
+        <!--这一句至关重要如果没有，就无法输出sql语句 -->
+        <logger name="lm.test.ehcache_demo.dao.mapper" level="DEBUG" />
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+                <pattern>${PATTERN}</pattern>
+            </encoder>
+        </appender>
+        <logger name="com.roncoo.education" level="debug"/>
+
+        <root level="info">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+
+    <!-- 测试环境 -->
+    <springProfile name="test">
+        <!-- mybatis日志打印 -->
+        <logger name="com.ibatis" level="DEBUG" />
+        <logger name="com.ibatis.common.jdbc.SimpleDataSource" level="DEBUG" />
+        <logger name="com.ibatis.common.jdbc.ScriptRunner" level="DEBUG" />
+        <logger name="com.ibatis.sqlmap.engine.impl.SqlMapClientDelegate" level="DEBUG" />
+        <logger name="java.sql.Connection" level="DEBUG" />
+        <logger name="java.sql.Statement" level="DEBUG" />
+        <logger name="java.sql.PreparedStatement" level="DEBUG" />
+        <!--这一句至关重要如果没有，就无法输出sql语句 -->
+        <logger name="cn.net.wangfujing.partner.dao.mapper" level="DEBUG" />
+        <!-- 每天产生一个文件 -->
+        <appender name="TEST-FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <!-- 文件路径 -->
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 文件名称 -->
+                <FileNamePattern>${TEST_FILE_PATH}/info.%d{yyyy-MM-dd}.log</FileNamePattern>
+                <!-- 文件最大保存历史数量 -->
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+        <root level="info">
+            <appender-ref ref="TEST-FILE" />
+        </root>
+    </springProfile>
+
+    <!-- 生产环境 -->
+    <springProfile name="prod">
+        <appender name="PROD_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <fileNamePattern>${PRO_FILE_PATH}/warn.%d{yyyy-MM-dd}.log</fileNamePattern>
+                <MaxHistory>100</MaxHistory>
+            </rollingPolicy>
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>${PATTERN}</pattern>
+            </layout>
+        </appender>
+        <root level="warn">
+            <appender-ref ref="PROD_FILE" />
+        </root>
+    </springProfile>
+
+</configuration>

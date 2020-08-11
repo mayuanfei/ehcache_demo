@@ -1,0 +1,11 @@
+server:
+  port: 8999
+  servlet:
+    context-path: /cloudorder
+
+
+
+
+
+
+

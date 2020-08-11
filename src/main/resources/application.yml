@@ -1,0 +1,50 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      #初始化连接数
+      initial-size: 2
+      #连接池最大使用连接数量
+      max-active: 20
+      #连接池最小空闲
+      min-idle: 2
+      #最大等待时间
+      max-wait: 60000
+      #配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+      timeBetweenEvictionRunsMillis: 60000
+      validationQuery : "select 1 from dual"
+      testWhileIdle: true
+      testOnReturn: false
+      testOnBorrow: false
+      #配置一个连接在池中最小生存的时间，单位是毫秒
+      minEvictableIdleTimeMillis: 180000
+      #打开removeAbandoned功能[单位是秒,查看3分钟还没有释放连接的功能]
+      logAbandoned: true
+      removeAbandoned: true
+      removeAbandonedTimeout: 180
+      filters: stat,config
+  mvc:
+    throw-exception-if-no-handler-found: true
+  #ehcache配置文件路径
+  cache:
+    type: ehcache
+    ehcache:
+      config: classpath:ehcache/ehcache.xml
+server:
+  servlet:
+    context-path: "/ehcachedemo"
+  tomcat:
+    uri-encoding: utf-8
+#mybatis启用驼峰命名
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+#日志配置
+logging:
+  config: classpath:logback_ehcachedemo.xml
+#jasypt
+jasypt:
+  encryptor:
+    password: 123456
